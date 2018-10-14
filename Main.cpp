@@ -56,7 +56,7 @@ void loadGLTextures(const aiScene *scene)
 
 	/* scan scene's materials for textures */
 	/* Simplified version: Retrieves only the first texture with index 0 if present*/
-	for (unsigned int m = 0; m < scene->mNumMaterials; ++m)
+	for (uint m = 0; m < scene->mNumMaterials; ++m)
 	{
 		aiString path; // filename
 
@@ -113,7 +113,7 @@ void render(const aiScene *sc, const aiNode *nd)
 	glMultMatrixf((float *)&m); //Multiply by the transformation matrix for this node
 
 	// Draw all meshes assigned to this node
-	for (int n = 0; n < nd->mNumMeshes; n++)
+	for (uint n = 0; n < nd->mNumMeshes; n++)
 	{
 		meshIndex = nd->mMeshes[n];		  //Get the mesh indices from the current node
 		mesh = scene->mMeshes[meshIndex]; //Using mesh index, get the mesh object
@@ -134,7 +134,7 @@ void render(const aiScene *sc, const aiNode *nd)
 			glDisable(GL_COLOR_MATERIAL);
 
 		//Get the polygons from each mesh and draw them
-		for (int k = 0; k < mesh->mNumFaces; k++)
+		for (uint k = 0; k < mesh->mNumFaces; k++)
 		{
 			face = &mesh->mFaces[k];
 			GLenum face_mode;
@@ -157,7 +157,7 @@ void render(const aiScene *sc, const aiNode *nd)
 
 			glBegin(face_mode);
 
-			for (int i = 0; i < face->mNumIndices; i++)
+			for (uint i = 0; i < face->mNumIndices; i++)
 			{
 				int vertexIndex = face->mIndices[i];
 
@@ -175,7 +175,7 @@ void render(const aiScene *sc, const aiNode *nd)
 	}
 
 	// Draw all children
-	for (int i = 0; i < nd->mNumChildren; i++)
+	for (uint i = 0; i < nd->mNumChildren; i++)
 		render(sc, nd->mChildren[i]);
 
 	glPopMatrix();
@@ -203,7 +203,7 @@ aiMatrix4x4 get_interpolated_rotation(double tick, aiNodeAnim *node)
 {
 	aiQuatKey prevKey;
 	aiQuatKey nextKey;
-	for (int frame = 0; frame < node->mNumRotationKeys; frame++)
+	for (uint frame = 0; frame < node->mNumRotationKeys; frame++)
 	{
 		if (tick > node->mRotationKeys[frame].mTime)
 		{
@@ -230,7 +230,7 @@ aiMatrix4x4 get_interpolated_position(double tick, aiNodeAnim *node)
 {
 	aiVectorKey prevKey;
 	aiVectorKey nextKey;
-	for (int frame = 0; frame < node->mNumPositionKeys; frame++)
+	for (uint frame = 0; frame < node->mNumPositionKeys; frame++)
 	{
 		if (tick > node->mPositionKeys[frame].mTime)
 		{
@@ -264,7 +264,7 @@ void update(int millisSinceStart)
 
 	double tick = fmod((millisSinceStart * anim->mTicksPerSecond) / 1000.0, anim->mDuration);
 
-	for (int i = 0; i < anim->mNumChannels; i++)
+	for (uint i = 0; i < anim->mNumChannels; i++)
 	{
 		aiNodeAnim *node = anim->mChannels[i];
 
