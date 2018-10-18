@@ -2,6 +2,11 @@
 // Helper functions
 //-----------------------------------------------------------------------------
 
+#include <assimp/cimport.h>
+#include <assimp/types.h>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 #define aisgl_min(x, y) (x < y ? x : y)
 #define aisgl_max(x, y) (y > x ? y : x)
 
