@@ -34,11 +34,11 @@ class Task1
             aiNodeAnim *node = anim->mChannels[i];
 
             aiMatrix4x4 rotationMatrix = get_interpolated_rotation(tick, node);
-            aiMatrix4x4 postitionMatrix = get_interpolated_position(tick, node);
+            aiMatrix4x4 positionMatrix = get_interpolated_position(tick, node);
 
             aiNode *skeletonNode = scene->mRootNode->FindNode(node->mNodeName);
 
-            skeletonNode->mTransformation = postitionMatrix * rotationMatrix;
+            skeletonNode->mTransformation = positionMatrix * rotationMatrix;
         }
     }
 
