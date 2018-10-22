@@ -222,4 +222,82 @@ void render(const aiScene *sc, const aiNode *nd)
 	glPopMatrix();
 }
 
+// ------A recursive function to traverse scene graph and render each mesh----------
+void render_only_meshes(const aiScene *sc, const aiNode *nd)
+{
+	aiMatrix4x4 m = nd->mTransformation;
+	aiMesh *mesh;
+	aiFace *face;
+	//GLuint texId;
+	int meshIndex; //, materialIndex;
+
+	//aiTransposeMatrix4(&m); //Convert to column-major order
+	//glPushMatrix();
+	//glMultMatrixf((float *)&m); //Multiply by the transformation matrix for this node
+
+	// Draw all meshes assigned to this node
+	for (uint n = 0; n < sc->mNumMeshes; n++)
+	{
+		mesh = sc->mMeshes[n]; //Using mesh index, get the mesh object
+
+		apply_material(sc->mMaterials[mesh->mMaterialIndex]); //Change opengl state to that material's properties
+
+		if (mesh->HasNormals())
+			glEnable(GL_LIGHTING);
+		else
+			glDisable(GL_LIGHTING);
+
+		if (mesh->HasVertexColors(0))
+		{
+			glEnable(GL_COLOR_MATERIAL);
+			glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
+		}
+		else
+			glDisable(GL_COLOR_MATERIAL);
+
+		//Get the polygons from each mesh and draw them
+		for (uint k = 0; k < mesh->mNumFaces; k++)
+		{
+			face = &mesh->mFaces[k];
+			GLenum face_mode;
+
+			switch (face->mNumIndices)
+			{
+			case 1:
+				face_mode = GL_POINTS;
+				break;
+			case 2:
+				face_mode = GL_LINES;
+				break;
+			case 3:
+				face_mode = GL_TRIANGLES;
+				break;
+			default:
+				face_mode = GL_POLYGON;
+				break;
+			}
+
+			glBegin(face_mode);
+
+			for (uint i = 0; i < face->mNumIndices; i++)
+			{
+				int vertexIndex = face->mIndices[i];
+
+				if (mesh->HasVertexColors(0))
+					glColor4fv((GLfloat *)&mesh->mColors[0][vertexIndex]);
+
+				if (mesh->HasNormals())
+					glNormal3fv(&mesh->mNormals[vertexIndex].x);
+				//std::cout << mesh->mVertices[vertexIndex].x << " " << mesh->mVertices[vertexIndex].y << " " << mesh->mVertices[vertexIndex].z << std::endl;
+
+				glVertex3fv(&mesh->mVertices[vertexIndex].x);
+			}
+
+			glEnd();
+		}
+	}
+
+	//glPopMatrix();
+}
+
 #endif
