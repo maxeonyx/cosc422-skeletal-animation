@@ -34,7 +34,6 @@ class Task1
             // we assume that the only node with multiple position keyframes is the root node of the skeleton
             if (node->mNumPositionKeys > 1)
             {
-                std::cout << node->mNodeName.C_Str() << " has a non-identiy pos matrix" << std::endl;
                 aiVector3D vec1(1.0f);
                 vec1 *= positionMatrix;
                 rootPosition = vec1;
