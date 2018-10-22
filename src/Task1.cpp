@@ -5,15 +5,10 @@ class Task1
   private:
     const aiScene *scene;
 
-    aiVector3D scene_min;
-    aiVector3D scene_max;
-
   public:
     void init()
     {
         scene = loadScene("models/Model1_BVH/Boxing.bvh"); //<<<-------------Specify input file name heres
-
-        get_bounding_box(scene, &scene_min, &scene_max);
 
         if (scene == nullptr)
         {
@@ -48,13 +43,6 @@ class Task1
 
         float pos[4] = {50, 50, 50, 1};
         glLightfv(GL_LIGHT0, GL_POSITION, pos);
-
-        // scale the whole asset to fit into our view frustum
-        float tmp = scene_max.x - scene_min.x;
-        tmp = aisgl_max(scene_max.y - scene_min.y, tmp);
-        tmp = aisgl_max(scene_max.z - scene_min.z, tmp);
-        tmp = 1.f / tmp;
-        glScalef(tmp, tmp, tmp);
 
         aiNode *root = this->scene->mRootNode;
 
