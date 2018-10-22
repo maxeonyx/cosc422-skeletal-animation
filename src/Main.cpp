@@ -85,6 +85,18 @@ void update(int millisSinceStart)
 //----Keyboard callback to toggle initial model orientation---
 void keyboard(unsigned char key, int x, int y)
 {
+	if (key == '1')
+	{
+		state.currentTask = T1;
+	}
+	if (key == '2')
+	{
+		state.currentTask = T2;
+	}
+	if (key == '3')
+	{
+		state.currentTask = T3;
+	}
 	glutPostRedisplay();
 }
 
