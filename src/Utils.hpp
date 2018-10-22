@@ -12,6 +12,14 @@
 
 using namespace std;
 
+class Mesh
+{
+  public:
+	std::vector<aiVector3D> vertices;
+	std::vector<aiVector3D> normals;
+	Mesh(std::vector<aiVector3D> vertices, std::vector<aiVector3D> normals) : vertices(vertices), normals(normals) {}
+};
+
 // Find the keyframes that the animation is currently between, and produce an interpolated rotation.
 aiMatrix4x4 get_interpolated_rotation(double tick, aiNodeAnim *node)
 {
