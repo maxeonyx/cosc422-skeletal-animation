@@ -27,7 +27,7 @@ aiMatrix4x4 get_interpolated_rotation(double tick, aiNodeAnim *node)
 	aiQuatKey nextKey;
 	for (uint frame = 0; frame < node->mNumRotationKeys; frame++)
 	{
-		if (tick > node->mRotationKeys[frame].mTime)
+		if (tick >= node->mRotationKeys[frame].mTime)
 		{
 			prevKey = node->mRotationKeys[frame];
 			continue;
@@ -54,7 +54,7 @@ aiMatrix4x4 get_interpolated_position(double tick, aiNodeAnim *node)
 	aiVectorKey nextKey;
 	for (uint frame = 0; frame < node->mNumPositionKeys; frame++)
 	{
-		if (tick > node->mPositionKeys[frame].mTime)
+		if (tick >= node->mPositionKeys[frame].mTime)
 		{
 			prevKey = node->mPositionKeys[frame];
 			continue;
