@@ -4,6 +4,7 @@ class Task1
 {
   private:
     const aiScene *scene;
+    aiVector3D rootPosition;
 
   public:
     void init()
@@ -30,6 +31,14 @@ class Task1
 
             aiMatrix4x4 rotationMatrix = get_interpolated_rotation(tick, node);
             aiMatrix4x4 positionMatrix = get_interpolated_position(tick, node);
+            // we assume that the only node with multiple position keyframes is the root node of the skeleton
+            if (node->mNumPositionKeys > 1)
+            {
+                std::cout << node->mNodeName.C_Str() << " has a non-identiy pos matrix" << std::endl;
+                aiVector3D vec1(1.0f);
+                vec1 *= positionMatrix;
+                rootPosition = vec1;
+            }
 
             aiNode *skeletonNode = scene->mRootNode->FindNode(node->mNodeName);
 
@@ -39,12 +48,13 @@ class Task1
 
     void display()
     {
-        gluLookAt(0, 0, 3, 0, 0, -5, 0, 1, 0);
 
         float pos[4] = {50, 50, 50, 1};
         glLightfv(GL_LIGHT0, GL_POSITION, pos);
 
         aiNode *root = this->scene->mRootNode;
+
+        gluLookAt(0, 220, -500, rootPosition.x, rootPosition.y, rootPosition.z, 0, 1, 0);
 
         render(this->scene, root);
     }
