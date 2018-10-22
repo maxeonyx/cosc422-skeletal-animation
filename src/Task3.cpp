@@ -45,6 +45,13 @@ class Task3
 
             aiMatrix4x4 rotationMatrix = get_interpolated_rotation(tick, node);
             aiMatrix4x4 positionMatrix = get_interpolated_position(tick, node);
+            // we assume that the only node with multiple position keyframes is the root node of the skeleton
+            if (node->mNumPositionKeys > 1)
+            {
+                aiVector3D vec1(1.0f);
+                vec1 *= positionMatrix;
+                rootPosition = vec1;
+            }
 
             aiNode *skeletonNode = scene->mRootNode->FindNode(node->mNodeName);
 
