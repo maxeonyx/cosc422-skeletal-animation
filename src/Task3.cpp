@@ -93,7 +93,7 @@ class Task3
 
         aiNode *root = this->scene->mRootNode;
 
-        gluLookAt(0, 0, 6, rootPosition.x, rootPosition.y, rootPosition.z, 0, 1, 0);
+        gluLookAt(-2, 2, 6, rootPosition.x, rootPosition.y, rootPosition.z, 0, 1, 0);
 
         glRotatef(90, 1, 0, 0);
         glRotatef(90, 0, 0, 1);
