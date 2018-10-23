@@ -33,7 +33,7 @@ struct Main
 	Task1 task1;
 	Task2 task2;
 	Task3 task3;
-	Task currentTask = T1;
+	Task currentTask = T3;
 };
 
 Main state;

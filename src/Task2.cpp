@@ -109,7 +109,7 @@ class Task2
 
         gluLookAt(-0.5, 6.5, 8.5, -0.5, 2.5, 1.5, 0, 1, 0);
 
-        render_only_meshes(this->scene, root);
+        render(this->scene, this->scene->mRootNode, std::map<int, int>());
     }
 
     void keyboard(unsigned char key)

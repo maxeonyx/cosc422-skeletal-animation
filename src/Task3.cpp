@@ -9,12 +9,13 @@ class Task3
     aiVector3D rootPosition;
     int current_animation = 0;
     std::vector<Mesh> initial_state;
+    std::map<int, int> texMap;
 
   public:
     void init()
     {
-        scene = aiImportFile("models/Model3_X/wuson.x", aiProcessPreset_TargetRealtime_MaxQuality); //<<<-------------Specify input file name heres
-
+        scene = aiImportFile("models/Model3_X/ArmyPilot.x", aiProcessPreset_TargetRealtime_MaxQuality); //<<<-------------Specify input file name heres
+        loadGLTextures(scene, texMap);
         if (scene == nullptr)
         {
             cout << "Could not read model file for Task 3." << endl;
@@ -101,12 +102,14 @@ class Task3
 
         aiNode *root = this->scene->mRootNode;
 
-        gluLookAt(4, 2, 6, rootPosition.x, rootPosition.y, rootPosition.z, 0, 1, 0);
+        gluLookAt(-3, 1.2, 0, rootPosition.x, rootPosition.y, rootPosition.z, 0, 1, 0);
+
+        glScalef(0.01, 0.01, 0.01);
 
         glRotatef(90, 1, 0, 0);
         glRotatef(-90, 0, 0, 1);
 
-        render(this->scene, root);
+        render(this->scene, root, texMap);
     }
 
     void keyboard(unsigned char key)

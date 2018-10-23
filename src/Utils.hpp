@@ -79,7 +79,7 @@ aiMatrix4x4 get_interpolated_position(double tick, aiNodeAnim *node)
 	return positionMatrix;
 }
 
-void loadGLTextures(const aiScene *scene, GLuint *texIdMap)
+void loadGLTextures(const aiScene *scene, std::map<int, int> &texIdMap)
 {
 
 	/* initialization of DevIL */
@@ -98,6 +98,13 @@ void loadGLTextures(const aiScene *scene, GLuint *texIdMap)
 
 		if (scene->mMaterials[m]->GetTexture(aiTextureType_DIFFUSE, 0, &path) == AI_SUCCESS)
 		{
+			std::string s(path.C_Str());
+			std::string delimiter = "/";
+			std::string token = s.substr(s.rfind(delimiter) + 1, s.length());
+
+			std::string s2("models/Model3_X/");
+			s2.append(token);
+
 			glEnable(GL_TEXTURE_2D);
 			ILuint imageId;
 			GLuint texId;
@@ -107,7 +114,7 @@ void loadGLTextures(const aiScene *scene, GLuint *texIdMap)
 			ilBindImage(imageId); /* Binding of DevIL image name */
 			ilEnable(IL_ORIGIN_SET);
 			ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
-			if (ilLoadImage((ILstring)path.data)) //if success
+			if (ilLoadImage((ILstring)s2.c_str())) //if success
 			{
 				/* Convert image to RGBA */
 				ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
@@ -128,15 +135,15 @@ void loadGLTextures(const aiScene *scene, GLuint *texIdMap)
 			}
 			else
 			{
-				cout << "Couldn't load Image: %s\n"
-					 << path.data << endl;
+				cout << "Couldn't load Image:\n"
+					 << s2 << endl;
 			}
 		}
 	} //loop for material
 }
 
 // ------A recursive function to traverse scene graph and render each mesh----------
-void render(const aiScene *sc, const aiNode *nd)
+void render(const aiScene *sc, const aiNode *nd, std::map<int, int> texMap)
 {
 	aiMatrix4x4 m = nd->mTransformation;
 	aiMesh *mesh;
@@ -160,6 +167,12 @@ void render(const aiScene *sc, const aiNode *nd)
 			glEnable(GL_LIGHTING);
 		else
 			glDisable(GL_LIGHTING);
+
+		if (mesh->HasTextureCoords(0))
+		{
+			glEnable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, texMap[meshIndex]);
+		}
 
 		if (mesh->HasVertexColors(0))
 		{
@@ -201,6 +214,11 @@ void render(const aiScene *sc, const aiNode *nd)
 				if (mesh->HasNormals())
 					glNormal3fv(&mesh->mNormals[vertexIndex].x);
 
+				if (mesh->HasTextureCoords(0))
+				{
+					glTexCoord2f(mesh->mTextureCoords[0][vertexIndex].x, mesh->mTextureCoords[0][vertexIndex].y);
+				}
+
 				glVertex3fv(&mesh->mVertices[vertexIndex].x);
 			}
 
@@ -210,86 +228,9 @@ void render(const aiScene *sc, const aiNode *nd)
 
 	// Draw all children
 	for (uint i = 0; i < nd->mNumChildren; i++)
-		render(sc, nd->mChildren[i]);
+		render(sc, nd->mChildren[i], texMap);
 
 	glPopMatrix();
-}
-
-// ------A recursive function to traverse scene graph and render each mesh----------
-void render_only_meshes(const aiScene *sc, const aiNode *nd)
-{
-	aiMatrix4x4 m = nd->mTransformation;
-	aiMesh *mesh;
-	aiFace *face;
-	//GLuint texId;
-	int meshIndex; //, materialIndex;
-
-	//aiTransposeMatrix4(&m); //Convert to column-major order
-	//glPushMatrix();
-	//glMultMatrixf((float *)&m); //Multiply by the transformation matrix for this node
-
-	// Draw all meshes assigned to this node
-	for (uint n = 0; n < sc->mNumMeshes; n++)
-	{
-		mesh = sc->mMeshes[n]; //Using mesh index, get the mesh object
-
-		apply_material(sc->mMaterials[mesh->mMaterialIndex]); //Change opengl state to that material's properties
-
-		if (mesh->HasNormals())
-			glEnable(GL_LIGHTING);
-		else
-			glDisable(GL_LIGHTING);
-
-		if (mesh->HasVertexColors(0))
-		{
-			glEnable(GL_COLOR_MATERIAL);
-			glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
-		}
-		else
-			glDisable(GL_COLOR_MATERIAL);
-
-		//Get the polygons from each mesh and draw them
-		for (uint k = 0; k < mesh->mNumFaces; k++)
-		{
-			face = &mesh->mFaces[k];
-			GLenum face_mode;
-
-			switch (face->mNumIndices)
-			{
-			case 1:
-				face_mode = GL_POINTS;
-				break;
-			case 2:
-				face_mode = GL_LINES;
-				break;
-			case 3:
-				face_mode = GL_TRIANGLES;
-				break;
-			default:
-				face_mode = GL_POLYGON;
-				break;
-			}
-
-			glBegin(face_mode);
-
-			for (uint i = 0; i < face->mNumIndices; i++)
-			{
-				int vertexIndex = face->mIndices[i];
-
-				if (mesh->HasVertexColors(0))
-					glColor4fv((GLfloat *)&mesh->mColors[0][vertexIndex]);
-
-				if (mesh->HasNormals())
-					glNormal3fv(&mesh->mNormals[vertexIndex].x);
-
-				glVertex3fv(&mesh->mVertices[vertexIndex].x);
-			}
-
-			glEnd();
-		}
-	}
-
-	//glPopMatrix();
 }
 
 #endif

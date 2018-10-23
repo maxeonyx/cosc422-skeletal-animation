@@ -56,11 +56,11 @@ class Task1
 
         render_stepped_pyramid();
         glColor3f(0.1, 0.1, 0.6);
-        render(this->scene, root);
+        render(this->scene, root, std::map<int, int>());
         glPushMatrix();
         glColor3f(1, 1, 1);
         glScalef(1, 0.01, 1);
-        render(this->scene, root);
+        render(this->scene, root, std::map<int, int>());
         glPopMatrix();
     }
 
