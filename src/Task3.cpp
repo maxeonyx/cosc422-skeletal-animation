@@ -118,8 +118,8 @@ class Task3
         glColor3f(0.1, 0.5, 0.1);
         glScalef(10, 0.01, 10);
         glutSolidCube(1);
-
         glDisable(GL_COLOR_MATERIAL);
+
         glPopMatrix();
     }
 

@@ -102,14 +102,26 @@ class Task2
 
     void display()
     {
-        float pos[4] = {50, 50, 50, 1};
+        float pos[4] = {-400, 1500, 1300, 1};
         glLightfv(GL_LIGHT0, GL_POSITION, pos);
+        glColor3f(1.0, 1.0, 1.0);
+        glEnable(GL_COLOR_MATERIAL);
+        glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 
         aiNode *root = this->scene->mRootNode;
 
-        gluLookAt(-0.5, 6.5, 8.5, -0.5, 2.5, 1.5, 0, 1, 0);
+        gluLookAt(-0.5, 600.5, 1300.5, -0.5, 200, 1.5, 0, 1, 0);
 
         render(this->scene, this->scene->mRootNode, std::map<int, int>());
+
+        glPushMatrix();
+        glEnable(GL_COLOR_MATERIAL);
+        glColor3f(0.1, 0.5, 0.1);
+        glScalef(1000, 0.01, 1000);
+        glutSolidCube(1);
+        glDisable(GL_COLOR_MATERIAL);
+
+        glPopMatrix();
     }
 
     void keyboard(unsigned char key)

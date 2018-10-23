@@ -33,7 +33,7 @@ struct Main
 	Task1 task1;
 	Task2 task2;
 	Task3 task3;
-	Task currentTask = T3;
+	Task currentTask = T2;
 };
 
 Main state;
@@ -79,7 +79,7 @@ void update(int millisSinceStart)
 		break;
 	}
 	glutPostRedisplay();
-	glutTimerFunc(10, update, millisSinceStart + 10);
+	glutTimerFunc(10, update, millisSinceStart + 12);
 }
 
 //----Keyboard callback to toggle initial model orientation---
