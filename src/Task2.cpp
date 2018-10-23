@@ -56,17 +56,12 @@ class Task2
             if (node->mNumPositionKeys > 1)
             {
                 positionMatrix = aiMatrix4x4();
-                //std::cout << node->mNodeName.C_Str() << " has multiple position keyframes" << std::endl;
                 aiVector3D vec1(1.0f);
                 vec1 *= positionMatrix;
                 rootPosition = vec1;
             }
 
             aiNode *skeletonNode = scene->mRootNode->FindNode(node->mNodeName);
-            if (skeletonNode == nullptr)
-            {
-                std::cout << "could not find a node for the animation channel" << std::endl;
-            }
 
             skeletonNode->mTransformation = positionMatrix * rotationMatrix;
         }
@@ -84,11 +79,6 @@ class Task2
             {
                 aiBone *bone = mesh->mBones[idx_bone];
                 aiNode *node = scene->mRootNode->FindNode(bone->mName);
-                if (node == nullptr)
-                {
-                    std::cout << "could not find a node for the animation channel" << std::endl;
-                }
-
                 aiMatrix4x4 boneTransform = bone->mOffsetMatrix;
                 while (node != nullptr)
                 {
@@ -117,14 +107,6 @@ class Task2
 
         aiNode *root = this->scene->mRootNode;
 
-        std::cout << rootPosition.x << " " << rootPosition.y << " " << rootPosition.z << std::endl;
-
-        // scale the whole asset to fit into our view frustum
-        // float tmp = scene_max.x - scene_min.x;
-        // tmp = aisgl_max(scene_max.y - scene_min.y, tmp);
-        // tmp = aisgl_max(scene_max.z - scene_min.z, tmp);
-        // tmp = 1.f / tmp;
-        // glScalef(tmp, tmp, tmp);
         gluLookAt(-0.5, 6.5, 8.5, -0.5, 2.5, 1.5, 0, 1, 0);
 
         render_only_meshes(this->scene, root);

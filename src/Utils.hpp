@@ -281,7 +281,6 @@ void render_only_meshes(const aiScene *sc, const aiNode *nd)
 
 				if (mesh->HasNormals())
 					glNormal3fv(&mesh->mNormals[vertexIndex].x);
-				//std::cout << mesh->mVertices[vertexIndex].x << " " << mesh->mVertices[vertexIndex].y << " " << mesh->mVertices[vertexIndex].z << std::endl;
 
 				glVertex3fv(&mesh->mVertices[vertexIndex].x);
 			}
