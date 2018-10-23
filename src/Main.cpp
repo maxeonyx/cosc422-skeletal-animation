@@ -47,17 +47,17 @@ void init()
 	glutInitContextProfile(GLUT_CORE_PROFILE);
 
 	//--------------------OpenGL initialization------------------------
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClearColor(0.7f, 0.8f, 1.0f, 1.0f);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_NORMALIZE);
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
-	glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
+	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(45, 1, 1.0, 1000.0);
+	gluPerspective(45, 1, 1.0, 100000.0);
 
 	state.task1.init();
 	state.task2.init();

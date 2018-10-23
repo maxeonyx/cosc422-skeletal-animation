@@ -169,10 +169,8 @@ void render(const aiScene *sc, const aiNode *nd)
 		if (mesh->HasVertexColors(0))
 		{
 			glEnable(GL_COLOR_MATERIAL);
-			glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
+			glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 		}
-		else
-			glDisable(GL_COLOR_MATERIAL);
 
 		//Get the polygons from each mesh and draw them
 		for (uint k = 0; k < mesh->mNumFaces; k++)
