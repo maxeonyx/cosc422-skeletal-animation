@@ -102,14 +102,25 @@ class Task3
 
         aiNode *root = this->scene->mRootNode;
 
-        gluLookAt(-3, 1.2, 0, rootPosition.x, rootPosition.y, rootPosition.z, 0, 1, 0);
+        gluLookAt(2, 2.8, -2.8, 1, 1.2, 0, 0, 1, 0);
 
+        glPushMatrix();
         glScalef(0.01, 0.01, 0.01);
 
         glRotatef(90, 1, 0, 0);
         glRotatef(-90, 0, 0, 1);
 
         render(this->scene, root, texMap);
+        glPopMatrix();
+
+        glPushMatrix();
+        glEnable(GL_COLOR_MATERIAL);
+        glColor3f(0.1, 0.5, 0.1);
+        glScalef(10, 0.01, 10);
+        glutSolidCube(1);
+
+        glDisable(GL_COLOR_MATERIAL);
+        glPopMatrix();
     }
 
     void keyboard(unsigned char key)

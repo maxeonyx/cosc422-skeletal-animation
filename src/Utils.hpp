@@ -127,7 +127,7 @@ void loadGLTextures(const aiScene *scene, std::map<int, int> &texIdMap)
 							 ilGetInteger(IL_IMAGE_HEIGHT), 0, GL_RGBA, GL_UNSIGNED_BYTE,
 							 ilGetData());
 				glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-				cout << "Texture:" << path.data << " successfully loaded." << endl;
+				cout << "Texture:" << s2 << " successfully loaded." << endl;
 				glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 				glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
 				glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
@@ -172,6 +172,13 @@ void render(const aiScene *sc, const aiNode *nd, std::map<int, int> texMap)
 		{
 			glEnable(GL_TEXTURE_2D);
 			glBindTexture(GL_TEXTURE_2D, texMap[meshIndex]);
+		}
+		else
+		{
+			float black[3] = {0, 0, 0};
+			glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, black);
+			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, black);
+			glDisable(GL_TEXTURE_2D);
 		}
 
 		if (mesh->HasVertexColors(0))
