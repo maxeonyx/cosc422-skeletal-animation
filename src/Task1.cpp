@@ -9,7 +9,7 @@ class Task1
   public:
     void init()
     {
-        scene = loadScene("models/Model1_BVH/Boxing.bvh"); //<<<-------------Specify input file name heres
+        scene = aiImportFile("models/Model1_BVH/Boxing.bvh", aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_Debone); //<<<-------------Specify input file name heres
 
         if (scene == nullptr)
         {

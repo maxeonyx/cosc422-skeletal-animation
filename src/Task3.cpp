@@ -7,12 +7,13 @@ class Task3
   private:
     const aiScene *scene;
     aiVector3D rootPosition;
+    int current_animation = 0;
     std::vector<Mesh> initial_state;
 
   public:
     void init()
     {
-        scene = loadScene("models/Model3_X/wuson.x"); //<<<-------------Specify input file name heres
+        scene = aiImportFile("models/Model3_X/wuson.x", aiProcessPreset_TargetRealtime_MaxQuality); //<<<-------------Specify input file name heres
 
         if (scene == nullptr)
         {
@@ -35,7 +36,7 @@ class Task3
 
     void update(int millisSinceStart)
     {
-        aiAnimation *anim = scene->mAnimations[0];
+        aiAnimation *anim = scene->mAnimations[current_animation];
 
         double tick = fmod((millisSinceStart * anim->mTicksPerSecond) / 1000.0, anim->mDuration);
 
@@ -108,8 +109,12 @@ class Task3
         render(this->scene, root);
     }
 
-    void keyboard()
+    void keyboard(unsigned char key)
     {
+        if (key == ' ')
+        {
+            current_animation = (current_animation + 1) % scene->mNumAnimations;
+        }
     }
 
     void cleanup()

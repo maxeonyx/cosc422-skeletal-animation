@@ -79,11 +79,6 @@ aiMatrix4x4 get_interpolated_position(double tick, aiNodeAnim *node)
 	return positionMatrix;
 }
 
-const aiScene *loadScene(const char *fileName)
-{
-	return aiImportFile(fileName, aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_Debone);
-}
-
 void loadGLTextures(const aiScene *scene, GLuint *texIdMap)
 {
 

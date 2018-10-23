@@ -5,7 +5,8 @@ class Task2
 {
   private:
     const aiScene *scene;
-    const aiScene *sceneJump;
+    std::vector<const aiScene *> animations;
+    int current_animation = 0;
     aiVector3D scene_min;
     aiVector3D scene_max;
     aiVector3D rootPosition;
@@ -14,8 +15,10 @@ class Task2
   public:
     void init()
     {
-        scene = loadScene("models/Model2_FBX/mannequin.fbx"); //<<<-------------Specify input file name heres
-        sceneJump = loadScene("models/Model2_FBX/jump.fbx");
+        scene = aiImportFile("models/Model2_FBX/mannequin.fbx", aiProcessPreset_TargetRealtime_MaxQuality);
+        animations.push_back(aiImportFile("models/Model2_FBX/walk.fbx", aiProcessPreset_TargetRealtime_MaxQuality));
+        animations.push_back(aiImportFile("models/Model2_FBX/jump.fbx", aiProcessPreset_TargetRealtime_MaxQuality));
+        animations.push_back(aiImportFile("models/Model2_FBX/run.fbx", aiProcessPreset_TargetRealtime_MaxQuality));
 
         if (scene == nullptr)
         {
@@ -40,10 +43,9 @@ class Task2
 
     void update(int millisSinceStart)
     {
-        aiAnimation *anim = sceneJump->mAnimations[0];
+        aiAnimation *anim = animations[current_animation]->mAnimations[0];
 
         double tick = fmod((millisSinceStart * anim->mTicksPerSecond) / 1000.0, anim->mDuration);
-
         for (uint i = 0; i < anim->mNumChannels; i++)
         {
             aiNodeAnim *node = anim->mChannels[i];
@@ -128,8 +130,12 @@ class Task2
         render_only_meshes(this->scene, root);
     }
 
-    void keyboard()
+    void keyboard(unsigned char key)
     {
+        if (key == ' ')
+        {
+            current_animation = (current_animation + 1) % animations.size();
+        }
     }
 
     void cleanup()

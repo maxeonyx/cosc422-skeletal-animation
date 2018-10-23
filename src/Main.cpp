@@ -97,6 +97,10 @@ void keyboard(unsigned char key, int x, int y)
 	{
 		state.currentTask = T3;
 	}
+
+	state.task2.keyboard(key);
+	state.task3.keyboard(key);
+
 	glutPostRedisplay();
 }
 
